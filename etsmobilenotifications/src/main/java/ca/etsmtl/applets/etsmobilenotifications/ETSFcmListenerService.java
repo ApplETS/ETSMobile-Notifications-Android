@@ -155,7 +155,6 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 url);
     }
 
-
     /**
      * Returns an instance of {@link EtsMobileNotificationManager} used manage push notifications
      *
