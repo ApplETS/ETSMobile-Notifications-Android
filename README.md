@@ -2,8 +2,6 @@
 
 Android library that handle push notifications for ÉTSMobile
 
-Check out the [wiki](https://github.com/ApplETS/ETSMobile-Notifications-Android/wiki) for details such as the device registration/retrievement process
-
 ### Installation
 ##### Add Firebase to your project
 
@@ -224,3 +222,8 @@ When the user has successfully logged in to MonÉTS, call `NotificationsLoginMan
 </details>
 
 Finally, when the user has logged out, call `NotificationsLoginManager.logout`. You may also want to delete the notifications saved on the device.
+
+### About
+Originally, this was developed for the [second version of ÉTSMobile](https://github.com/ApplETS/ETSMobile-Android2). The [code](https://github.com/ApplETS/ETSMobile-Android2/pull/138) has been extracted from the project and modified, so that it can be reused in further versions of ÉTSMobile.
+
+Check out the [wiki](https://github.com/ApplETS/ETSMobile-Notifications-Android/wiki) for details such as the device registration/retrievement process
