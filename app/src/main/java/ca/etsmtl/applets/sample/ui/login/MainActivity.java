@@ -1,10 +1,11 @@
-package ca.etsmtl.applets.sample;
+package ca.etsmtl.applets.sample.ui.login;
 
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ca.etsmtl.applets.sample.R;
 
 public class MainActivity extends AppCompatActivity {
 

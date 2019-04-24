@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import ca.etsmtl.applets.etsmobilenotifications.ETSFcmListenerService;
 import ca.etsmtl.applets.etsmobilenotifications.EtsMobileNotificationManager;
 import ca.etsmtl.applets.etsmobilenotifications.MonETSNotification;
-import ca.etsmtl.applets.sample.MainActivity;
+import ca.etsmtl.applets.sample.ui.login.MainActivity;
 
 
 public class AppETSFcmListenerService extends ETSFcmListenerService {
