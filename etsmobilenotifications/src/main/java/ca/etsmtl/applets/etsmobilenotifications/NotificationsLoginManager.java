@@ -11,7 +11,7 @@ public final class NotificationsLoginManager {
      *
      * @param context Context
      * @param userName The user name (universal code)
-     * @param monEtsDomaine MonÉTS' domain
+     * @param monEtsDomaine MonÉTS' domain (ens or etsmtl)
      */
     public static void login(Context context, String userName, String monEtsDomaine) {
         SecurePreferences.Editor editor = getPrefsEditor(context);
@@ -70,9 +70,9 @@ public final class NotificationsLoginManager {
     }
 
     /**
-     * Get MonETS' domain
+     * Get MonETS' domain (ens or etsmtl)
      *
-     * @return MonETS' domain
+     * @return MonETS' domain (ens or etsmtl)
      */
     static String getMonEtsDomaine(Context context) {
         SecurePreferences securePreferences = new SecurePreferences(context);

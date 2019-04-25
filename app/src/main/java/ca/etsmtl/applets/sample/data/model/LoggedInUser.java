@@ -5,19 +5,19 @@ package ca.etsmtl.applets.sample.data.model;
  */
 public class LoggedInUser {
 
-    private String userId;
-    private String displayName;
+    private String username;
+    private String domain;
 
-    public LoggedInUser(String userId, String displayName) {
-        this.userId = userId;
-        this.displayName = displayName;
+    public LoggedInUser(String username, String domain) {
+        this.username = username;
+        this.domain = domain;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getDomain() {
+        return domain;
     }
 }

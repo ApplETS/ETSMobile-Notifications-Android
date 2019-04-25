@@ -1,5 +1,7 @@
 package ca.etsmtl.applets.sample.data;
 
+import com.securepreferences.SecurePreferences;
+
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 
 /**
@@ -8,39 +10,59 @@ import ca.etsmtl.applets.sample.data.model.LoggedInUser;
  */
 public class LoginRepository {
 
+    private static final String USERNAME_PREF_KEY = "ca.etsmtl.applets.sample.USERNAME_PREF_KEY";
+    private static final String DOMAIN_PREF_KEY = "ca.etsmtl.applets.sample.DOMAIN_PREF_KEY";
+
     private static volatile LoginRepository instance;
 
-    private LoginDataSource dataSource;
+    private final SecurePreferences securePreferences;
+    private final LoginDataSource dataSource;
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
     private LoggedInUser user = null;
 
     // private constructor : singleton access
-    private LoginRepository(LoginDataSource dataSource) {
+    private LoginRepository(SecurePreferences securePreferences, LoginDataSource dataSource) {
+        this.securePreferences = securePreferences;
         this.dataSource = dataSource;
     }
 
-    public static LoginRepository getInstance(LoginDataSource dataSource) {
+    public static LoginRepository getInstance(SecurePreferences securePreferences,
+                                              LoginDataSource dataSource) {
         if (instance == null) {
-            instance = new LoginRepository(dataSource);
+            instance = new LoginRepository(securePreferences, dataSource);
         }
         return instance;
     }
 
-    public boolean isLoggedIn() {
-        return user != null;
+    public LoggedInUser loadCachedLoggedInUser() {
+        String userName = securePreferences.getString(USERNAME_PREF_KEY, null);
+        String domain = securePreferences.getString(DOMAIN_PREF_KEY, null);
+
+        if (userName == null || domain == null) {
+            return null;
+        } else {
+            return new LoggedInUser(userName, domain);
+        }
     }
 
     public void logout() {
+        securePreferences.edit()
+                .remove(USERNAME_PREF_KEY)
+                .remove(DOMAIN_PREF_KEY)
+                .apply();
+
         user = null;
-        dataSource.logout();
     }
 
     private void setLoggedInUser(LoggedInUser user) {
         this.user = user;
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+
+        securePreferences.edit()
+                .putString(USERNAME_PREF_KEY, user.getUsername())
+                .putString(DOMAIN_PREF_KEY, user.getDomain())
+                .apply();
     }
 
     public Result<LoggedInUser> login(String username, String password) {

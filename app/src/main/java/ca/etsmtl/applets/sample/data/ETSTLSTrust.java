@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
  *
  * @author zaclimon
  */
-public class ETSTLSTrust {
+class ETSTLSTrust {
 
     private X509TrustManager manager;
     private SSLContext context;
