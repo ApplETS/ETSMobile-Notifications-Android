@@ -2,6 +2,7 @@ package ca.etsmtl.applets.sample.data;
 
 import com.securepreferences.SecurePreferences;
 
+import ca.etsmtl.applets.sample.data.api.LoginDataSource;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 
 /**

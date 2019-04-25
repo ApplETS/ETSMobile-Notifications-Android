@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.sample.data;
+package ca.etsmtl.applets.sample.data.api;
 
 import android.content.Context;
 

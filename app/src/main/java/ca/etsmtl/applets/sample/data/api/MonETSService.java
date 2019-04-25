@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.sample.data;
+package ca.etsmtl.applets.sample.data.api;
 
 import ca.etsmtl.applets.sample.data.model.LoginRequestBody;
 import ca.etsmtl.applets.sample.data.model.LoginResponse;

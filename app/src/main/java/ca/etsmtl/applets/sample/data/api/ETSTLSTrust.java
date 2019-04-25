@@ -1,4 +1,4 @@
-package ca.etsmtl.applets.sample.data;
+package ca.etsmtl.applets.sample.data.api;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
