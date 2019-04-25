@@ -1,6 +1,7 @@
 package ca.etsmtl.applets.sample.ui.login;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ca.etsmtl.applets.sample.R;
@@ -11,7 +12,7 @@ import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private MediatorLiveData<LoginResult> loginResult = new MediatorLiveData<>();
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -27,15 +28,18 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
+        LiveData<Result<LoggedInUser>> loginSrc = loginRepository.login(username, password);
 
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDomain())));
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+        loginResult.addSource(loginSrc, loggedInUserResult -> {
+            if (loggedInUserResult instanceof Result.Success) {
+                LoggedInUser data = ((Result.Success<LoggedInUser>) loggedInUserResult).getData();
+                loginResult.postValue(new LoginResult(new LoggedInUserView(data.getUsername())));
+            } else {
+                loginResult.postValue(new LoginResult(R.string.login_failed));
+            }
+
+            loginResult.removeSource(loginSrc);
+        });
     }
 
     public void loginDataChanged(String username, String password) {

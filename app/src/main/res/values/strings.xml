@@ -6,11 +6,11 @@
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
     <string name="action_sign_in_short">Connexion</string>
-    <string name="welcome">"Bienvenue!"</string>
+    <string name="welcome">"Bienvenue "</string>
     <string name="invalid_username">Code universel invalide</string>
     <string name="invalid_password">Mot de passe invalide</string>
     <string name="login_failed">Échec de la tentative de connexion</string>
-    <string name="logged_in_user_name">Code universel : %1$s</string>
+    <string name="logged_in_user_name">Nom d\'utilisateur : %1$s</string>
     <string name="logged_in_domain">Domaine : %1$s</string>
     <string name="action_login">Se connecter</string>
     <string name="action_logout">Se déconnecter</string>

@@ -2,6 +2,8 @@ package ca.etsmtl.applets.sample.data.api;
 
 import android.content.Context;
 
+import ca.etsmtl.applets.sample.data.api.util.LiveDataCallAdapterFactory;
+import ca.etsmtl.applets.sample.data.api.util.TLSUtilities;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -18,6 +20,7 @@ public final class MonETSServiceFactory {
                     .baseUrl("https://portail.etsmtl.ca/api/")
                     .client(TLSUtilities.createETSOkHttpClient(context))
                     .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(new LiveDataCallAdapterFactory())
                     .build();
 
             instance = retrofit.create(MonETSService.class);

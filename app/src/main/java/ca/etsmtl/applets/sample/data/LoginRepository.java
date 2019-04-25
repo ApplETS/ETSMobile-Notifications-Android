@@ -2,6 +2,8 @@ package ca.etsmtl.applets.sample.data;
 
 import com.securepreferences.SecurePreferences;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import ca.etsmtl.applets.sample.data.api.LoginDataSource;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 
@@ -66,12 +68,18 @@ public class LoginRepository {
                 .apply();
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public LiveData<Result<LoggedInUser>> login(String username, String password) {
         // handle login
-        Result<LoggedInUser> result = dataSource.login(username, password);
-        if (result instanceof Result.Success) {
-            setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
-        }
+        MediatorLiveData<Result<LoggedInUser>> result = new MediatorLiveData<>();
+
+        result.addSource(dataSource.login(username, password), loggedInUserResult -> {
+            if (loggedInUserResult instanceof Result.Success) {
+                setLoggedInUser(((Result.Success<LoggedInUser>) loggedInUserResult).getData());
+            }
+
+            result.postValue(loggedInUserResult);
+        });
+
         return result;
     }
 }

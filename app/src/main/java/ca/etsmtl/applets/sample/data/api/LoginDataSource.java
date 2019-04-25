@@ -1,12 +1,13 @@
 package ca.etsmtl.applets.sample.data.api;
 
-import java.io.IOException;
-
+import androidx.arch.core.util.Function;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 import ca.etsmtl.applets.sample.data.Result;
+import ca.etsmtl.applets.sample.data.api.util.ApiResponse;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 import ca.etsmtl.applets.sample.data.model.LoginRequestBody;
 import ca.etsmtl.applets.sample.data.model.LoginResponse;
-import retrofit2.Response;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -19,24 +20,22 @@ public class LoginDataSource {
         this.monETSService = monETSService;
     }
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public LiveData<Result<LoggedInUser>> login(String username, String password) {
 
-        try {
-            Response<LoginResponse> response = monETSService
-                    .login(new LoginRequestBody(username, password))
-                    .execute();
-            LoginResponse loginResponse = response.body();
+        LiveData<ApiResponse<LoginResponse>> apiSrc = monETSService
+                .login(new LoginRequestBody(username, password));
 
-            if (response.isSuccessful() && loginResponse != null) {
+        return Transformations.map(apiSrc, (Function<ApiResponse<LoginResponse>, Result<LoggedInUser>>) apiResponse -> {
+            LoginResponse loginResponse = apiResponse.body;
+
+            if (apiResponse.isSuccessful() && loginResponse != null) {
                 LoggedInUser loggedInUser = new LoggedInUser(loginResponse.getUsername(),
                         loginResponse.getDomain());
 
                 return new Result.Success<>(loggedInUser);
             } else {
-                return new Result.Error(new Exception(response.errorBody().string()));
+                return new Result.Error(new Exception(apiResponse.errorMessage));
             }
-        } catch (Exception e) {
-            return new Result.Error(new IOException("Error logging in", e));
-        }
+        });
     }
 }

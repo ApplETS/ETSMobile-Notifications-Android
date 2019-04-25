@@ -43,7 +43,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         if (loggedInUser == null) {
             newMainState = new MainState(false, "", "");
         } else {
-            newMainState = new MainState(false, loggedInUser.getUsername(), loggedInUser.getDomain());
+            newMainState = new MainState(true, loggedInUser.getUsername(), loggedInUser.getDomain());
         }
 
         mainState.setValue(newMainState);

@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
         subscribeUI();
     }
 
-
     private void subscribeUI() {
         mainViewModel.getMainState().observe(this, mainState -> {
             if (mainState == null) {
@@ -40,8 +39,13 @@ public class MainActivity extends AppCompatActivity {
             setViewVisible(loginButton, mainState.isLoginButtonVisible());
             setViewVisible(usernameTv, mainState.isUniversalCodeVisible());
             setViewVisible(domainTv, mainState.isDomainVisible());
-            usernameTv.setText(mainState.getUniversalCodeText());
-            domainTv.setText(mainState.getDomainText());
+
+            String userNameTxt = getString(R.string.logged_in_user_name,
+                    mainState.getUniversalCodeText());
+            usernameTv.setText(userNameTxt);
+
+            String domainTxt = getString(R.string.logged_in_domain, mainState.getDomainText());
+            domainTv.setText(domainTxt);
         });
 
         mainViewModel.getNavigateToLogin().observe(this, aVoid -> {
