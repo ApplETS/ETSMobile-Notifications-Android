@@ -10,6 +10,7 @@ class MainState {
     private String universalCodeText;
     private boolean domainVisible;
     private String domainText;
+    private boolean logoutButtonVisible;
 
     public MainState(boolean userLoggedIn, String universalCodeText, String domainText) {
         this.loginButtonVisible = !userLoggedIn;
@@ -17,6 +18,7 @@ class MainState {
         this.universalCodeText= universalCodeText;
         this.domainVisible = userLoggedIn;
         this.domainText = domainText;
+        this.logoutButtonVisible = userLoggedIn;
     }
 
     public boolean isLoginButtonVisible() {
@@ -37,5 +39,9 @@ class MainState {
 
     public String getDomainText() {
         return domainText;
+    }
+
+    public boolean isLogoutButtonVisible() {
+        return logoutButtonVisible;
     }
 }

@@ -35,6 +35,12 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         navigateToLogin.setValue(null);
     }
 
+    public void clickLogoutButton() {
+        loginRepository.logout();
+
+        checkUserLoggedIn();
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void checkUserLoggedIn() {
         LoggedInUser loggedInUser = loginRepository.loadCachedLoggedInUser();

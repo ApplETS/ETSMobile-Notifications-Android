@@ -32,4 +32,16 @@
         android:textColor="@android:color/white"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@android:color/white" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_logout"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        app:backgroundTint="@color/colorPrimary"
+        app:icon="@drawable/ic_exit_to_app_black_24dp"
+        app:iconTint="@android:color/white"
+        app:rippleColor="@android:color/white" />
 </LinearLayout>

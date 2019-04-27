@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
     private Button loginButton;
+    private Button logoutButton;
     private TextView usernameTv;
     private TextView domainTv;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = ViewModelProviders.of(this, new MainViewModelFactory(this))
                 .get(MainViewModel.class);
         loginButton = findViewById(R.id.btn_login);
+        logoutButton = findViewById(R.id.btn_logout);
         usernameTv = findViewById(R.id.tv_username);
         domainTv = findViewById(R.id.tv_domain);
         subscribeUI();
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
             setViewVisible(loginButton, mainState.isLoginButtonVisible());
             setViewVisible(usernameTv, mainState.isUniversalCodeVisible());
             setViewVisible(domainTv, mainState.isDomainVisible());
+            setViewVisible(logoutButton, mainState.isLogoutButtonVisible());
 
             String userNameTxt = getString(R.string.logged_in_user_name,
                     mainState.getUniversalCodeText());
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(view -> mainViewModel.clickLoginButton());
+        logoutButton.setOnClickListener(view -> mainViewModel.clickLogoutButton());
 
         getLifecycle().addObserver(mainViewModel);
     }
