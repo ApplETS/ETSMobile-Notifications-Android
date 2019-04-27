@@ -29,7 +29,7 @@ public class LoginDataSource {
             LoginResponse loginResponse = apiResponse.body;
 
             if (apiResponse.isSuccessful() && loginResponse != null) {
-                LoggedInUser loggedInUser = new LoggedInUser(loginResponse.getUsername(),
+                LoggedInUser loggedInUser = new LoggedInUser(username,
                         loginResponse.getDomain());
 
                 return new Result.Success<>(loggedInUser);

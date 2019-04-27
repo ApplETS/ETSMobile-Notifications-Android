@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
-import ca.etsmtl.applets.sample.data.LoginRepository;
+import ca.etsmtl.applets.sample.data.repository.LoginRepository;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 
 /**

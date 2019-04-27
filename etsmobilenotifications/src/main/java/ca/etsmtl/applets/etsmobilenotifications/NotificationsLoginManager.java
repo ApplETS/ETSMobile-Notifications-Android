@@ -35,13 +35,15 @@ public final class NotificationsLoginManager {
         handler.deleteEndpoint();
 
         SecurePreferences.Editor editor = getPrefsEditor(context);
+        editor.clear();
+        editor.apply();
 
         editor.putBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
         editor.apply();
     }
 
     private static SecurePreferences.Editor getPrefsEditor(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.edit();
     }
@@ -53,7 +55,7 @@ public final class NotificationsLoginManager {
      * @return True if the user is logged in
      */
     static boolean isUserLoggedIn(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
     }
@@ -64,7 +66,7 @@ public final class NotificationsLoginManager {
      * @return The user name
      */
     static String getUserName(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getString(Constants.USER_NAME_PREF_KEY, null);
     }
@@ -75,7 +77,7 @@ public final class NotificationsLoginManager {
      * @return MonETS' domain (ens or etsmtl)
      */
     static String getMonEtsDomaine(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getString(Constants.MON_ETS_DOMAINE_PREF_KEY, null);
     }

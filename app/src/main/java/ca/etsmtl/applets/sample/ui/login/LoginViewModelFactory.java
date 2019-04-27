@@ -7,7 +7,7 @@ import com.securepreferences.SecurePreferences;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import ca.etsmtl.applets.sample.data.LoginRepository;
+import ca.etsmtl.applets.sample.data.repository.LoginRepository;
 import ca.etsmtl.applets.sample.data.api.LoginDataSource;
 import ca.etsmtl.applets.sample.data.api.MonETSService;
 import ca.etsmtl.applets.sample.data.api.MonETSServiceFactory;
@@ -32,7 +32,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
             SecurePreferences securePreferences = new SecurePreferences(context);
             MonETSService monETSService = MonETSServiceFactory.getMonETSService(context);
 
-            return (T) new LoginViewModel(LoginRepository.getInstance(securePreferences,
+            return (T) new LoginViewModel(LoginRepository.getInstance(context, securePreferences,
                     new LoginDataSource(monETSService)));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");

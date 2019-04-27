@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import ca.etsmtl.applets.sample.R;
-import ca.etsmtl.applets.sample.data.LoginRepository;
+import ca.etsmtl.applets.sample.data.repository.LoginRepository;
 import ca.etsmtl.applets.sample.data.Result;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 

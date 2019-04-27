@@ -1,9 +1,13 @@
-package ca.etsmtl.applets.sample.data;
+package ca.etsmtl.applets.sample.data.repository;
+
+import android.content.Context;
 
 import com.securepreferences.SecurePreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import ca.etsmtl.applets.etsmobilenotifications.NotificationsLoginManager;
+import ca.etsmtl.applets.sample.data.Result;
 import ca.etsmtl.applets.sample.data.api.LoginDataSource;
 import ca.etsmtl.applets.sample.data.model.LoggedInUser;
 
@@ -18,6 +22,7 @@ public class LoginRepository {
 
     private static volatile LoginRepository instance;
 
+    private final Context context;
     private final SecurePreferences securePreferences;
     private final LoginDataSource dataSource;
 
@@ -26,15 +31,17 @@ public class LoginRepository {
     private LoggedInUser user = null;
 
     // private constructor : singleton access
-    private LoginRepository(SecurePreferences securePreferences, LoginDataSource dataSource) {
+    private LoginRepository(Context context, SecurePreferences securePreferences, LoginDataSource dataSource) {
+        this.context = context;
         this.securePreferences = securePreferences;
         this.dataSource = dataSource;
     }
 
-    public static LoginRepository getInstance(SecurePreferences securePreferences,
+    public static LoginRepository getInstance(Context context,
+                                              SecurePreferences securePreferences,
                                               LoginDataSource dataSource) {
         if (instance == null) {
-            instance = new LoginRepository(securePreferences, dataSource);
+            instance = new LoginRepository(context, securePreferences, dataSource);
         }
         return instance;
     }
@@ -57,6 +64,8 @@ public class LoginRepository {
                 .apply();
 
         user = null;
+
+        NotificationsLoginManager.logout(context);
     }
 
     private void setLoggedInUser(LoggedInUser user) {
@@ -66,6 +75,8 @@ public class LoginRepository {
                 .putString(USERNAME_PREF_KEY, user.getUsername())
                 .putString(DOMAIN_PREF_KEY, user.getDomain())
                 .apply();
+
+        NotificationsLoginManager.login(context, user.getUsername(), user.getDomain());
     }
 
     public LiveData<Result<LoggedInUser>> login(String username, String password) {

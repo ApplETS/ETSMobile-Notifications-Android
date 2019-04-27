@@ -65,7 +65,7 @@ public class ArnEndpointHandler {
         token = appToken;
         userData = data;
         applicationArn =  MetaDataUtils.getValue(context, metaDataPrefix + ".SNS_ARN");
-        securePreferences = new SecurePreferences(context);
+        securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
     }
 
     private void verifyPlatformApplication(AmazonSNS client) {
