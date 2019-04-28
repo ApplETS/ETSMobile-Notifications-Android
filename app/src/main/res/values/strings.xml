@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">ETSMobile-Notifications-Android</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="title_activity_login">Connexion</string>
+    <string name="prompt_username">Code universel</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="welcome">"Bienvenue "</string>
+    <string name="invalid_username">Code universel invalide</string>
+    <string name="invalid_password">Mot de passe invalide</string>
+    <string name="login_failed">Échec de la tentative de connexion</string>
+    <string name="logged_in_user_name">Nom d\'utilisateur : %1$s</string>
+    <string name="logged_in_domain">Domaine : %1$s</string>
+    <string name="action_login">Se connecter</string>
+    <string name="action_logout">Se déconnecter</string>
 </resources>

@@ -37,7 +37,10 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        etsMobileNotificationManager = getEtsMobileNotificationManager();
+        if (etsMobileNotificationManager == null) {
+            etsMobileNotificationManager = getEtsMobileNotificationManager();
+        }
+
         Map<String, String> data = message.getData();
 
         /**

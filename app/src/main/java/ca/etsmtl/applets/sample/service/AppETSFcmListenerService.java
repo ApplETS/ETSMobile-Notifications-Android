@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import ca.etsmtl.applets.etsmobilenotifications.ETSFcmListenerService;
 import ca.etsmtl.applets.etsmobilenotifications.EtsMobileNotificationManager;
 import ca.etsmtl.applets.etsmobilenotifications.MonETSNotification;
-import ca.etsmtl.applets.sample.MainActivity;
+import ca.etsmtl.applets.sample.ui.main.MainActivity;
 
 
 public class AppETSFcmListenerService extends ETSFcmListenerService {
@@ -20,13 +20,14 @@ public class AppETSFcmListenerService extends ETSFcmListenerService {
     protected EtsMobileNotificationManager getEtsMobileNotificationManager() {
         return new EtsMobileNotificationManager() {
             @Override
-            public void saveNewNotification(MonETSNotification newNotification, List<MonETSNotification> previousNotifications) {
-                // Your code
+            public void saveNewNotification(MonETSNotification newNotification,
+                                            List<MonETSNotification> previousNotifications) {
+                // Not implemented in this example
             }
 
             @Override
             public List<MonETSNotification> getNotifications() {
-                // Your code
+                // Not implemented in this example
 
                 return new ArrayList<>();
             }
@@ -36,8 +37,6 @@ public class AppETSFcmListenerService extends ETSFcmListenerService {
     @Nullable
     @Override
     protected PendingIntent notificationClickedIntent(MonETSNotification monETSNotification) {
-        // Your code
-
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 

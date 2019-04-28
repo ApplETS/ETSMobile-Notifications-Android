@@ -11,7 +11,7 @@ public final class NotificationsLoginManager {
      *
      * @param context Context
      * @param userName The user name (universal code)
-     * @param monEtsDomaine MonÉTS' domain
+     * @param monEtsDomaine MonÉTS' domain (ens or etsmtl)
      */
     public static void login(Context context, String userName, String monEtsDomaine) {
         SecurePreferences.Editor editor = getPrefsEditor(context);
@@ -35,13 +35,15 @@ public final class NotificationsLoginManager {
         handler.deleteEndpoint();
 
         SecurePreferences.Editor editor = getPrefsEditor(context);
+        editor.clear();
+        editor.apply();
 
         editor.putBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
         editor.apply();
     }
 
     private static SecurePreferences.Editor getPrefsEditor(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.edit();
     }
@@ -53,7 +55,7 @@ public final class NotificationsLoginManager {
      * @return True if the user is logged in
      */
     static boolean isUserLoggedIn(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
     }
@@ -64,18 +66,18 @@ public final class NotificationsLoginManager {
      * @return The user name
      */
     static String getUserName(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getString(Constants.USER_NAME_PREF_KEY, null);
     }
 
     /**
-     * Get MonETS' domain
+     * Get MonETS' domain (ens or etsmtl)
      *
-     * @return MonETS' domain
+     * @return MonETS' domain (ens or etsmtl)
      */
     static String getMonEtsDomaine(Context context) {
-        SecurePreferences securePreferences = new SecurePreferences(context);
+        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getString(Constants.MON_ETS_DOMAINE_PREF_KEY, null);
     }
