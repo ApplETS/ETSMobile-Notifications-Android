@@ -2,7 +2,7 @@
 
 Android library that handle push notifications for ÉTSMobile
 
-<img src="https://github.com/ApplETS/ETSMobile-Notifications-Android/blob/example/docs/images/screenshot.png" alt="screenshot" width="270"/>
+<img src="https://github.com/ApplETS/ETSMobile-Notifications-Android/blob/master/docs/images/screenshot.png" alt="screenshot" width="270"/>
 
 ### Installation
 ##### Add Firebase to your project
