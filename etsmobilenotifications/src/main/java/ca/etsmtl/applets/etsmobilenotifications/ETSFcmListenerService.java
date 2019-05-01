@@ -114,7 +114,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
         for (MonETSNotification monETSNotification : monETSNotifications) {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_school_white_24dp)
+                    .setSmallIcon(R.drawable.ic_ets_logo_blanc)
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                     .setColor(ContextCompat.getColor(this, R.color.ets_red))
                     .setContentTitle(monETSNotification.getNotificationApplicationNom())
