@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -114,11 +115,12 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                     Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_school_white_24dp)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
                     .setColor(ContextCompat.getColor(this, R.color.ets_red))
                     .setContentTitle(monETSNotification.getNotificationApplicationNom())
                     .setContentText(monETSNotification.getNotificationTexte())
                     .setAutoCancel(true);
-            
+
             PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
 
             if (contentIntent != null) {
