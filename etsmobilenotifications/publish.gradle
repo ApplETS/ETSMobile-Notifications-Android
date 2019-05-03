@@ -35,6 +35,7 @@ publishing {
         dryRun = false
         override = false
         publish = true
+        override = true
         pkg {
             repo = 'NotreDame'
             name = project.name
