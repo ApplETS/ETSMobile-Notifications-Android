@@ -28,14 +28,23 @@ android:
     - addon-google_apis-google-28
 
 before_install:
-   - yes | sdkmanager "platform-tools" > /dev/null
-   - yes | sdkmanager "build-tools;28.0.3" > /dev/null
-   - yes | sdkmanager "platforms;android-28" > /dev/null
-   - yes | sdkmanager "extras;google;m2repository" > /dev/null
-   - yes | sdkmanager "extras;android;m2repository" > /dev/null
+  - yes | sdkmanager "platform-tools" > /dev/null
+  - yes | sdkmanager "build-tools;28.0.3" > /dev/null
+  - yes | sdkmanager "platforms;android-28" > /dev/null
+  - yes | sdkmanager "extras;google;m2repository" > /dev/null
+  - yes | sdkmanager "extras;android;m2repository" > /dev/null
 
 before_script:
-   - chmod +x gradlew
+  - chmod +x gradlew
 
 script:
-   - ./gradlew assembleRelease -PdisablePreDex
+  - ./gradlew assembleRelease -PdisablePreDex
+
+deploy:
+  provider: script
+  script: ./gradlew :clean :etsmobilenotifications:assembleRelease :etsmobilenotifications:bintrayUpload
+  skip_cleanup: true # to upload artifacts created during the build
+  dry-run: false
+  on:
+    branch: master
+
