@@ -1,5 +1,8 @@
 # ETSMobile-Notifications-Android
 
+[![Build Status](https://travis-ci.com/ApplETS/ETSMobile-Notifications-Android.svg?branch=master)](https://travis-ci.org/ApplETS/ETSMobile-Notifications-Android)[ ![Download](https://api.bintray.com/packages/clubapplets-server/NotreDame/etsmobilenotifications/images/download.svg) ](https://bintray.com/clubapplets-server/NotreDame/etsmobilenotifications/_latestVersion)
+
+
 Android library that handle push notifications for ÉTSMobile
 
 <img src="https://github.com/ApplETS/ETSMobile-Notifications-Android/blob/master/docs/images/screenshot.png" alt="screenshot" width="270"/>
@@ -12,7 +15,7 @@ Follow the instructions here: https://firebase.google.com/docs/android/setup
 ##### Add the dependancy to your `build.gradle`
 ```gradle
 dependencies {
-    implementation 'TBD'
+    implementation 'ca.applets.etsmobilenotifications:etsmobilenotifications:1.0.0'
 }
 ```
 
