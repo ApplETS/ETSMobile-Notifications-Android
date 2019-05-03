@@ -36,7 +36,7 @@ publishing {
         override = false
         publish = true
         pkg {
-            repo = 'ETSMobile'
+            repo = 'NotreDame'
             name = project.name
             licenses = ['Apache-2.0']
             desc = 'Android library that handle push notifications for ÉTSMobile'
