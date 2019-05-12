@@ -1,57 +1,14 @@
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: 'com.novoda.bintray-release'
 
-publishing {
-    publications {
-        Production(MavenPublication) {
-            artifact("$buildDir/outputs/aar/etsmobilenotifications-release.aar")
-            groupId 'ca.applets.etsmobilenotifications'
-            artifactId 'etsmobilenotifications'
-            version '1.0.0'
-
-            pom.withXml {
-                // Define this explicitly if using implementation or api configurations
-                def dependenciesNode = asNode().getAt('dependencies')[0] ?: asNode().appendNode('dependencies')
-
-                // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
-                configurations.implementation.allDependencies.each {
-                    // Ensure dependencies such as fileTree are not included.
-                    if (it.name != 'unspecified') {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-
-
-    bintray {
-        // Get Bintray credentials from environment variables (Travis)
-        user = System.getenv('BINTRAY_USER')
-        key = System.getenv('BINTRAY_API_KEY')
-        dryRun = false
-        publish = true
-        override = true
-        pkg {
-            repo = 'NotreDame'
-            name = project.name
-            licenses = ['Apache-2.0']
-            desc = 'Android library that handle push notifications for ÉTSMobile'
-            websiteUrl = 'https://github.com/ApplETS/ETSMobile-Notifications-Android'
-            issueTrackerUrl = 'https://github.com/ApplETS/ETSMobile-Notifications-Android/issues'
-            vcsUrl = 'https://github.com/ApplETS/ETSMobile-Notifications-Android.git'
-
-            githubRepo = 'ApplETS/ETSMobile-Notifications-Android'
-            githubReleaseNotesFile = 'README.md'
-
-            version {
-                name = '1.0.0'
-                vcsTag = '1.0.0'
-            }
-        }
-        publications = ['Production']
-    }
+publish {
+    userOrg = System.getenv('BINTRAY_USER') ?: "clubapplets-server"
+    bintrayUser = System.getenv('BINTRAY_USER') ?: "clubapplets-server"
+    bintrayKey = System.getenv('BINTRAY_API_KEY')
+    repoName = 'ETSMobile-Notifications-Android'
+    groupId = 'ca.applets.etsmobilenotifications'
+    artifactId = 'etsmobilenotifications'
+    publishVersion = '1.0.0'
+    desc = 'Android library that handle push notifications for ÉTSMobile'
+    website = 'https://github.com/ApplETS/ETSMobile-Notifications-Android'
+    override = true
 }
