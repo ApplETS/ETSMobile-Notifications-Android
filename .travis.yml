@@ -42,9 +42,7 @@ script:
 
 deploy:
   provider: script
-  script:
-    - ./gradlew clean build
-    - ./gradlew bintrayUpload --info
+  script: ./gradlew clean build bintrayUpload -PdryRun=false
   skip_cleanup: true # to upload artifacts created during the build
   dry-run: false
   on:
