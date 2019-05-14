@@ -24,8 +24,6 @@ import androidx.core.content.ContextCompat;
  */
 public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
-    private static final String TAG = "MyFcmListenerService";
-
     /**
      * Called when message is received.
      *
@@ -131,17 +129,23 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
         }
 
         int id = Integer.valueOf(idStr);
+        String idDossierStr = data.get("IdDossier");
+        int idDossier = idDossierStr == null ? 0 : Integer.valueOf(idDossierStr);
         String notificationTexte = data.get("NotificationTexte");
-
+        String notificationDateCreation = data.get("NotificationDateCreation");
+        String notificationDateDebutAffichage = data.get("NotificationDateDebutAffichage");
         String notificationApplicationNom = data.get("NotificationApplicationNom");
+        String notificationData = data.get("NotificationData");
         String url = data.get("Url");
 
         return new MonETSNotification(
                 id,
-                0,
+                idDossier,
                 notificationTexte,
-                null,
+                notificationDateCreation,
+                notificationDateDebutAffichage,
                 notificationApplicationNom,
+                notificationData,
                 url);
     }
 
@@ -155,12 +159,11 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     /**
      * Returns {@link PendingIntent} to execute when the user tap on the notification
      *
+     * @param monETSNotification Tapped notification
      * @return {@link PendingIntent} to execute when the user tap on a notification
      * @see <a href="https://developer.android.com/training/notify-user/navigation">
      * https://developer.android.com/training/notify-user/navigation
      * </a>
-     *
-     * @param monETSNotification Tapped notification
      */
     @Nullable
     protected PendingIntent notificationClickedIntent(MonETSNotification monETSNotification) {
@@ -168,7 +171,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     }
 
     /**
-     * Returns {@link PendingIntent} to execute when the notification is explicitly dismissed by the 
+     * Returns {@link PendingIntent} to execute when the notification is explicitly dismissed by the
      * user, either with the "Clear All" button or by swiping it away individually.
      *
      * @param monETSNotification Dimissed notification
