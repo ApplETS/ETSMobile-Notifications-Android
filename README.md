@@ -22,7 +22,7 @@ dependencies {
 ### Usage
 ##### Extend the `ETSFcmListenerService` class
 
-You must override the `getEtsMobileNotificationManager` method which let the superclass retrieve an instance of your implementation of `EtsMobileNotificationManager`.
+You must override the `saveNewNotification` method which will be called when a new notification is received.
 
 Optionally, you may also override the `notificationClickedIntent` and `notificationDismissedIntent` methods.
 `notificationClickedIntent` let you supply a [PendingIntent](https://developer.android.com/training/notify-user/navigation) to send when a notification is clicked. `notificationDismissedIntent` let your supply a `PendingIntent` to send when a notification is dismissed.
