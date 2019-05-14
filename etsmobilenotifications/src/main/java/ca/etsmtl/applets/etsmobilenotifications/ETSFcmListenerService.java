@@ -11,8 +11,6 @@ import android.os.Build;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
@@ -28,8 +26,6 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFcmListenerService";
 
-    private EtsMobileNotificationManager etsMobileNotificationManager;
-
     /**
      * Called when message is received.
      *
@@ -38,10 +34,6 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      */
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        if (etsMobileNotificationManager == null) {
-            etsMobileNotificationManager = getEtsMobileNotificationManager();
-        }
-
         Map<String, String> data = message.getData();
 
         /**
@@ -72,23 +64,19 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      * @param data FCM message received.
      */
     private void sendNotification(Map<String, String> data) {
-        List<MonETSNotification> previousMonETSNotifications = etsMobileNotificationManager.getNotifications();
-        ArrayList<MonETSNotification> monETSNotifications = new ArrayList<>(previousMonETSNotifications);
-        MonETSNotification nouvelleMonETSNotification = getMonETSNotificationFromMap(data);
+        MonETSNotification newMonETSNotification = getMonETSNotificationFromMap(data);
 
-        if (nouvelleMonETSNotification != null) {
-            monETSNotifications.add(nouvelleMonETSNotification);
+        if (newMonETSNotification != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                setupChannel();
+            }
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+            notifyNotifications(notificationManager, newMonETSNotification);
+
+            saveNewNotification(newMonETSNotification);
         }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setupChannel();
-        }
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-        notifyNotifications(notificationManager, monETSNotifications);
-
-        etsMobileNotificationManager.saveNewNotification(nouvelleMonETSNotification, previousMonETSNotifications);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -110,32 +98,29 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     }
 
     private void notifyNotifications(NotificationManagerCompat notificationManager,
-                                     List<MonETSNotification> monETSNotifications) {
-        for (MonETSNotification monETSNotification : monETSNotifications) {
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
-                    Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_ets_logo_blanc)
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
-                    .setColor(ContextCompat.getColor(this, R.color.ets_red))
-                    .setContentTitle(monETSNotification.getNotificationApplicationNom())
-                    .setContentText(monETSNotification.getNotificationTexte())
-                    .setAutoCancel(true);
+                                     MonETSNotification monETSNotification) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
+                Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_ets_logo_blanc)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher))
+                .setColor(ContextCompat.getColor(this, R.color.ets_red))
+                .setContentTitle(monETSNotification.getNotificationApplicationNom())
+                .setContentText(monETSNotification.getNotificationTexte())
+                .setAutoCancel(true);
 
-            PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
+        PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
 
-            if (contentIntent != null) {
-                notificationBuilder.setContentIntent(contentIntent);
-            }
-
-            PendingIntent deleteIntent = notificationDismissedIntent(monETSNotification);
-
-            if (deleteIntent != null) {
-                notificationBuilder.setDeleteIntent(deleteIntent);
-            }
-
-
-            notificationManager.notify(monETSNotification.getId(), notificationBuilder.build());
+        if (contentIntent != null) {
+            notificationBuilder.setContentIntent(contentIntent);
         }
+
+        PendingIntent deleteIntent = notificationDismissedIntent(monETSNotification);
+
+        if (deleteIntent != null) {
+            notificationBuilder.setDeleteIntent(deleteIntent);
+        }
+
+        notificationManager.notify(monETSNotification.getId(), notificationBuilder.build());
     }
 
     private MonETSNotification getMonETSNotificationFromMap(Map<String, String> data) {
@@ -161,11 +146,11 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     }
 
     /**
-     * Returns an instance of {@link EtsMobileNotificationManager} used manage push notifications
+     * Save new notification to device
      *
-     * @return An instance of {@link EtsMobileNotificationManager} used manage push notifications
+     * @param newNotification New notification to save
      */
-    protected abstract EtsMobileNotificationManager getEtsMobileNotificationManager();
+    protected abstract void saveNewNotification(MonETSNotification newNotification);
 
     /**
      * Returns {@link PendingIntent} to execute when the user tap on the notification
