@@ -3,13 +3,8 @@ package ca.etsmtl.applets.sample.service;
 import android.app.PendingIntent;
 import android.content.Intent;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import ca.etsmtl.applets.etsmobilenotifications.ETSFcmListenerService;
-import ca.etsmtl.applets.etsmobilenotifications.EtsMobileNotificationManager;
 import ca.etsmtl.applets.etsmobilenotifications.MonETSNotification;
 import ca.etsmtl.applets.sample.ui.main.MainActivity;
 
@@ -17,21 +12,8 @@ import ca.etsmtl.applets.sample.ui.main.MainActivity;
 public class AppETSFcmListenerService extends ETSFcmListenerService {
 
     @Override
-    protected EtsMobileNotificationManager getEtsMobileNotificationManager() {
-        return new EtsMobileNotificationManager() {
-            @Override
-            public void saveNewNotification(MonETSNotification newNotification,
-                                            List<MonETSNotification> previousNotifications) {
-                // Not implemented in this example
-            }
-
-            @Override
-            public List<MonETSNotification> getNotifications() {
-                // Not implemented in this example
-
-                return new ArrayList<>();
-            }
-        };
+    protected void saveNewNotification(MonETSNotification newNotification) {
+        // Not implemented in this example
     }
 
     @Nullable

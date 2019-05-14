@@ -1,27 +1,30 @@
 package ca.etsmtl.applets.etsmobilenotifications;
 
-import java.util.Date;
-
-import androidx.annotation.NonNull;
-
 /**
  * Created by gnut3ll4 on 15/12/15.
  */
-public class MonETSNotification implements Comparable<MonETSNotification> {
+public class MonETSNotification {
 
     private int id;
     private int dossierId;
     private String notificationTexte;
-    private Date notificationDateDebutAffichage;
+    private String notificationDateCreation;
+    private String notificationDateDebutAffichage;
     private String notificationApplicationNom;
+    private String NotificationData;
     private String url;
 
-    public MonETSNotification(int id, int dossierId, String notificationTexte, Date notificationDateDebutAffichage, String notificationApplicationNom, String url) {
+    public MonETSNotification(int id, int dossierId, String notificationTexte,
+                              String notificationDateCreation, String notificationDateDebutAffichage,
+                              String notificationApplicationNom, String notificationData,
+                              String url) {
         this.id = id;
         this.dossierId = dossierId;
         this.notificationTexte = notificationTexte;
+        this.notificationDateCreation = notificationDateCreation;
         this.notificationDateDebutAffichage = notificationDateDebutAffichage;
         this.notificationApplicationNom = notificationApplicationNom;
+        NotificationData = notificationData;
         this.url = url;
     }
 
@@ -37,7 +40,11 @@ public class MonETSNotification implements Comparable<MonETSNotification> {
         return notificationTexte;
     }
 
-    public Date getNotificationDateDebutAffichage() {
+    public String getNotificationDateCreation() {
+        return notificationDateCreation;
+    }
+
+    public String getNotificationDateDebutAffichage() {
         return notificationDateDebutAffichage;
     }
 
@@ -45,18 +52,11 @@ public class MonETSNotification implements Comparable<MonETSNotification> {
         return notificationApplicationNom;
     }
 
-    public String getUrl() {
-        return url;
+    public String getNotificationData() {
+        return NotificationData;
     }
 
-    @Override
-    public int compareTo(@NonNull MonETSNotification another) {
-        if(notificationDateDebutAffichage.after(another.getNotificationDateDebutAffichage())) {
-            return -1;
-        }
-        if(notificationDateDebutAffichage.before(another.getNotificationDateDebutAffichage())) {
-            return 1;
-        }
-        return 0;
+    public String getUrl() {
+        return url;
     }
 }
