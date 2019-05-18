@@ -27,52 +27,6 @@ You must override the `saveNewNotification` method which will be called when a n
 Optionally, you may also override the `notificationClickedIntent` and `notificationDismissedIntent` methods.
 `notificationClickedIntent` let you supply a [PendingIntent](https://developer.android.com/training/notify-user/navigation) to send when a notification is clicked. `notificationDismissedIntent` let your supply a `PendingIntent` to send when a notification is dismissed.
 
-<details><summary>Example from V2</summary>
-  
-```java
-  public class AppETSFcmListenerService extends ETSFcmListenerService {
-
-    private Gson gson = new Gson();
-
-    @Override
-    protected EtsMobileNotificationManager getEtsMobileNotificationManager() {
-        SecurePreferences securePreferences = new SecurePreferences(getApplicationContext());
-
-        return new EtsMobileNotificationManager() {
-            @Override
-            public void saveNewNotification(MonETSNotification newNotification, List<MonETSNotification> previousNotifications) {
-                List<MonETSNotification> notificationsToSave = new ArrayList<>(previousNotifications);
-                notificationsToSave.add(newNotification);
-
-                securePreferences.edit()
-                        .putString(Constants.RECEIVED_NOTIF, gson.toJson(notificationsToSave))
-                        .commit();
-            }
-
-            @Override
-            public List<MonETSNotification> getNotifications() {
-                String notificationsStr = securePreferences.getString(Constants.RECEIVED_NOTIF, "");
-
-                List<MonETSNotification> notifications = gson.fromJson(notificationsStr,
-                        new TypeToken<ArrayList<MonETSNotification>>() {}.getType());
-
-                return notifications == null ? new ArrayList<>() : notifications;
-            }
-        };
-    }
-
-    @Nullable
-    @Override
-    protected PendingIntent notificationClickedIntent(MonETSNotification monETSNotification) {
-        Intent intent = new Intent(this, NotificationActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        return PendingIntent.getActivity(this, 0, intent, 0);
-    }
-}
-```
-</details>
-
 ##### Add your service to your `AndroidManifest` like so:
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
