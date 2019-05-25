@@ -204,7 +204,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
 
     /**
      * Returns the label of the {@link NotificationChannel} used for a {@link MonETSNotification}
-     * that is about to sent to user.
+     * that is about to be sent to user.
      * Returns the {@link MonETSNotification#getNotificationApplicationNom()} by default whether
      * it's null or not.
      * If this function returns null, a fallback label will we used.
