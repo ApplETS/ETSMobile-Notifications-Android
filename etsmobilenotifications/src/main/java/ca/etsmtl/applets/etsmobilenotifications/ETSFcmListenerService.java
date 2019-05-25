@@ -65,38 +65,50 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
         MonETSNotification newMonETSNotification = getMonETSNotificationFromMap(data);
 
         if (newMonETSNotification != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                setupChannel();
-            }
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-            notifyNotifications(notificationManager, newMonETSNotification);
+            notifyNotification(notificationManager, newMonETSNotification);
 
             saveNewNotification(newMonETSNotification);
         }
     }
 
+    /**
+     * Set up a {@link NotificationChannel} for the given {@link MonETSNotification}
+     *
+     * @param monETSNotification
+     * @return {@link NotificationChannel}'s id
+     */
+    @Nullable
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setupChannel() {
+    private NotificationChannel setupChannel(MonETSNotification monETSNotification) {
+        String id;
+        String label = notificationChannelLabel(monETSNotification);
+        if (label == null) {
+            id = Constants.DEFAULT_NOTIFICATION_CHANNEL_ID;
+            label = getString(R.string.fcm_fallback_notification_channel_label);
+        } else {
+            id = label;
+        }
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationChannel channel = null;
 
         if (notificationManager != null) {
-            NotificationChannel channel = notificationManager
-                    .getNotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID);
+            channel = notificationManager.getNotificationChannel(id);
 
             if (channel == null) {
-                // We could create multiple channels based on the notification but let's just create one for maintenance purposes.
-                String channelName = getString(R.string.fcm_fallback_notification_channel_label);
-                channel = new NotificationChannel(Constants.DEFAULT_NOTIFICATION_CHANNEL_ID,
-                        channelName, NotificationManager.IMPORTANCE_HIGH);
+                channel = new NotificationChannel(id, label, NotificationManager.IMPORTANCE_HIGH);
                 notificationManager.createNotificationChannel(channel);
             }
         }
+
+        return channel;
     }
 
-    private void notifyNotifications(NotificationManagerCompat notificationManager,
-                                     MonETSNotification monETSNotification) {
+    private void notifyNotification(NotificationManagerCompat notificationManager,
+                                    MonETSNotification monETSNotification) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this,
                 Constants.DEFAULT_NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_ets_logo_blanc)
@@ -105,6 +117,13 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 .setContentTitle(monETSNotification.getNotificationApplicationNom())
                 .setContentText(monETSNotification.getNotificationTexte())
                 .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = setupChannel(monETSNotification);
+            if (notificationChannel != null) {
+                notificationBuilder.setChannelId(notificationChannel.getId());
+            }
+        }
 
         PendingIntent contentIntent = notificationClickedIntent(monETSNotification);
 
@@ -181,5 +200,23 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
     @Nullable
     protected PendingIntent notificationDismissedIntent(MonETSNotification monETSNotification) {
         return null;
+    }
+
+    /**
+     * Returns the label of the {@link NotificationChannel} used for a {@link MonETSNotification}
+     * that is about to be sent to user.
+     * Returns the {@link MonETSNotification#getNotificationApplicationNom()} by default whether
+     * it's null or not.
+     * If this function returns null, a fallback label will we used.
+     *
+     * Note that the label is also used as the {@link NotificationChannel}'s id.
+     *
+     * @param monETSNotification The {@link MonETSNotification} that is going to be sent
+     * @return Label of the {@link NotificationChannel} used for the {@link MonETSNotification}
+     * @see <a href="http://google.com">https://developer.android.com/training/notify-user/channels</a>
+     */
+    @Nullable
+    protected String notificationChannelLabel(MonETSNotification monETSNotification) {
+        return monETSNotification.getNotificationApplicationNom();
     }
 }
