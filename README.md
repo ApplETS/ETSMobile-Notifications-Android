@@ -12,7 +12,7 @@ Android library that handle push notifications for ÉTSMobile
 
 Follow the instructions here: https://firebase.google.com/docs/android/setup
 
-##### Add the dependancy to your `build.gradle`
+##### Add the dependency to your `build.gradle`
 ```gradle
 dependencies {
     implementation 'ca.applets.etsmobilenotifications:etsmobilenotifications:1.0.0'
