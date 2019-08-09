@@ -116,6 +116,9 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
                 .setColor(ContextCompat.getColor(this, R.color.ets_red))
                 .setContentTitle(monETSNotification.getNotificationApplicationNom())
                 .setContentText(monETSNotification.getNotificationTexte())
+                .setStyle(new NotificationCompat
+                        .BigTextStyle()
+                        .bigText(monETSNotification.getNotificationTexte()))
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -208,7 +211,7 @@ public abstract class ETSFcmListenerService extends FirebaseMessagingService {
      * Returns the {@link MonETSNotification#getNotificationApplicationNom()} by default whether
      * it's null or not.
      * If this function returns null, a fallback label will we used.
-     *
+     * <p>
      * Note that the label is also used as the {@link NotificationChannel}'s id.
      *
      * @param monETSNotification The {@link MonETSNotification} that is going to be sent

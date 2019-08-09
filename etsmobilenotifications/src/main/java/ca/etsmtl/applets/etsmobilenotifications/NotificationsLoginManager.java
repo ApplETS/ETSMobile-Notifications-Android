@@ -54,7 +54,7 @@ public final class NotificationsLoginManager {
      * @param context Context
      * @return True if the user is logged in
      */
-    static boolean isUserLoggedIn(Context context) {
+    public static boolean isUserLoggedIn(Context context) {
         SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
 
         return securePreferences.getBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
