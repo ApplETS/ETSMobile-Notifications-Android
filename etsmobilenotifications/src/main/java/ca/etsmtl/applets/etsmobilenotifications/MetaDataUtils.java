@@ -14,6 +14,8 @@ import android.os.Bundle;
  */
 
 final class MetaDataUtils {
+    private static final String META_DATA_PREFIX = "ca.etsmtl.applets.etsmobilenotifications";
+
     static String getValue(Context context, String name) {
         try {
             ApplicationInfo ai = context.getPackageManager()
@@ -21,7 +23,7 @@ final class MetaDataUtils {
                             PackageManager.GET_META_DATA);
             Bundle bundle = ai.metaData;
 
-            return bundle.getString(name);
+            return bundle.getString(META_DATA_PREFIX + name);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }

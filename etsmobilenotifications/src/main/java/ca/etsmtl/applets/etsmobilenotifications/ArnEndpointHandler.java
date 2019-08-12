@@ -56,15 +56,13 @@ public class ArnEndpointHandler {
     private SecurePreferences securePreferences;
 
     public ArnEndpointHandler(Context context, String appToken, String data) {
-        final String metaDataPrefix = "ca.etsmtl.applets.etsmobilenotifications";
-
         client = new AmazonSNSClient(new BasicAWSCredentials(
-                MetaDataUtils.getValue(context, metaDataPrefix + ".AWS_ACCESS_KEY"),
-                MetaDataUtils.getValue(context, metaDataPrefix + ".AWS_SECRET_KEY"))
+                MetaDataUtils.getValue(context, ".AWS_ACCESS_KEY"),
+                MetaDataUtils.getValue(context, ".AWS_SECRET_KEY"))
         );
         token = appToken;
         userData = data;
-        applicationArn =  MetaDataUtils.getValue(context, metaDataPrefix + ".SNS_ARN");
+        applicationArn =  MetaDataUtils.getValue(context, ".SNS_ARN");
         securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
     }
 
