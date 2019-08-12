@@ -7,7 +7,7 @@ publish {
     repoName = 'NotreDame'
     groupId = 'ca.applets.etsmobilenotifications'
     artifactId = 'etsmobilenotifications'
-    publishVersion = '1.0.1'
+    publishVersion = '1.0.2'
     desc = 'Android library that handle push notifications for ÉTSMobile'
     website = 'https://github.com/ApplETS/ETSMobile-Notifications-Android'
     override = true
