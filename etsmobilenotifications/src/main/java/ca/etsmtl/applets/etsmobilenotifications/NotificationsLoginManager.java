@@ -1,66 +1,46 @@
 package ca.etsmtl.applets.etsmobilenotifications;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 import com.securepreferences.SecurePreferences;
 
+import androidx.work.Constraints;
+import androidx.work.Data;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+
 public final class NotificationsLoginManager {
-    private static final String TAG = "LoginManager";
 
     /**
      * Call this method when the user has logged in
      *
-     * @param context {@link Context}
-     * @param userName The user name (universal code)
+     * @param context       {@link Context}
+     * @param userName      The user name (universal code)
      * @param monEtsDomaine MonÉTS' domain (ens or etsmtl)
      */
     public static void login(Context context, String userName, String monEtsDomaine) {
-        if (areMetaDataValid(context)) {
-            SecurePreferences.Editor editor = getPrefsEditor(context);
+        WorkManager workManager = WorkManager.getInstance(context);
+        workManager.cancelAllWorkByTag(LogoutWorker.TAG);
+        workManager.cancelAllWorkByTag(LoginWorker.TAG);
 
-            editor.putString(Constants.USER_NAME_PREF_KEY, userName);
-            editor.putString(Constants.MON_ETS_DOMAINE_PREF_KEY, monEtsDomaine);
-            editor.putBoolean(Constants.USER_LOGGED_IN_PREF_KEY, true);
-            editor.apply();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        Data inputData = new Data
+                .Builder()
+                .putString(LoginWorker.USER_NAME_PARAM_KEY, userName)
+                .putString(LoginWorker.MON_ETS_DOMAINE_KEY, monEtsDomaine)
+                .build();
+        OneTimeWorkRequest loginWorkRequest = new OneTimeWorkRequest
+                .Builder(LoginWorker.class)
+                .setConstraints(constraints)
+                .addTag(LoginWorker.TAG)
+                .setInputData(inputData)
+                .build();
 
-            FcmRegistrationIntentService.enqueueWork(context, new Intent());
-        }
-    }
-
-    /**
-     * Returns false if the ARN, access key or secret key hasn't been provided.
-     *
-     * @param context {@link Context}
-     * @return True if the ARN, the access key and the secret key have been provided.
-     */
-    private static boolean areMetaDataValid(Context context) {
-        String arn = MetaDataUtils.getValue(context, ".SNS_ARN");
-
-        if (arn == null || arn.isEmpty()) {
-            Log.e(TAG, "ARN is null or empty!");
-
-            return false;
-        }
-
-        String accessKey = MetaDataUtils.getValue(context, ".AWS_ACCESS_KEY");
-
-        if (accessKey == null || accessKey.isEmpty()) {
-            Log.e(TAG, "Access key is null or empty!");
-
-            return false;
-        }
-
-        String secretKey = MetaDataUtils.getValue(context, ".AWS_SECRET_KEY");
-
-        if (secretKey == null || secretKey.isEmpty()) {
-            Log.e(TAG, "Secret key is null or empty!");
-
-            return false;
-        }
-
-        return true;
+        workManager.enqueue(loginWorkRequest);
     }
 
     /**
@@ -69,22 +49,19 @@ public final class NotificationsLoginManager {
      * @param context {@link Context}
      */
     public static void logout(Context context) {
-        ArnEndpointHandler handler = new ArnEndpointHandler(context, "", "");
+        WorkManager workManager = WorkManager.getInstance(context);
+        workManager.cancelAllWorkByTag(LoginWorker.TAG);
 
-        handler.deleteEndpoint();
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest logoutWorkRequest = new OneTimeWorkRequest
+                .Builder(LogoutWorker.class)
+                .setConstraints(constraints)
+                .addTag(LogoutWorker.TAG)
+                .build();
 
-        SecurePreferences.Editor editor = getPrefsEditor(context);
-        editor.clear();
-        editor.apply();
-
-        editor.putBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
-        editor.apply();
-    }
-
-    private static SecurePreferences.Editor getPrefsEditor(Context context) {
-        SecurePreferences securePreferences = SecurePreferencesFactory.createSecurePreferences(context);
-
-        return securePreferences.edit();
+        workManager.enqueue(logoutWorkRequest);
     }
 
     /**
