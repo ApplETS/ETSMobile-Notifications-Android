@@ -6,6 +6,12 @@ import android.util.Log;
 
 import com.securepreferences.SecurePreferences;
 
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+
+
 public final class NotificationsLoginManager {
     private static final String TAG = "LoginManager";
 
@@ -18,6 +24,9 @@ public final class NotificationsLoginManager {
      */
     public static void login(Context context, String userName, String monEtsDomaine) {
         if (areMetaDataValid(context)) {
+            WorkManager workManager = WorkManager.getInstance(context);
+            workManager.cancelAllWorkByTag(LogoutWorker.TAG);
+
             SecurePreferences.Editor editor = getPrefsEditor(context);
 
             editor.putString(Constants.USER_NAME_PREF_KEY, userName);
@@ -69,16 +78,17 @@ public final class NotificationsLoginManager {
      * @param context {@link Context}
      */
     public static void logout(Context context) {
-        ArnEndpointHandler handler = new ArnEndpointHandler(context, "", "");
+        WorkManager workManager = WorkManager.getInstance(context);
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest deleteEndpointWorkRequest = new OneTimeWorkRequest
+                .Builder(LogoutWorker.class)
+                .setConstraints(constraints)
+                .addTag(LogoutWorker.TAG)
+                .build();
 
-        handler.deleteEndpoint();
-
-        SecurePreferences.Editor editor = getPrefsEditor(context);
-        editor.clear();
-        editor.apply();
-
-        editor.putBoolean(Constants.USER_LOGGED_IN_PREF_KEY, false);
-        editor.apply();
+        workManager.enqueue(deleteEndpointWorkRequest);
     }
 
     private static SecurePreferences.Editor getPrefsEditor(Context context) {

@@ -37,4 +37,7 @@ dependencies {
 
     // Secure-preferences
     implementation 'com.scottyab:secure-preferences-lib:0.1.7'
+
+    // WorkManager
+    implementation "androidx.work:work-runtime:2.1.0"
 }
