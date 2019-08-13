@@ -51,6 +51,7 @@ public final class NotificationsLoginManager {
     public static void logout(Context context) {
         WorkManager workManager = WorkManager.getInstance(context);
         workManager.cancelAllWorkByTag(LoginWorker.TAG);
+
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build();
