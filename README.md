@@ -15,7 +15,7 @@ Follow the instructions here: https://firebase.google.com/docs/android/setup
 ##### Add the dependency to your `build.gradle`
 ```gradle
 dependencies {
-    implementation 'ca.applets.etsmobilenotifications:etsmobilenotifications:1.0.0'
+    implementation 'ca.applets.etsmobilenotifications:etsmobilenotifications:1.1.0'
 }
 ```
 
